@@ -40,7 +40,7 @@ public class MergeSort<T extends Comparable<T>> {
         int j = 0;
         int k = left;
         while (i < n1 && j < n2) {
-            if (getValue(leftArray, i).compareTo(getValue(rightArray, j)) > 0) {
+            if (getValue(leftArray, i).compareTo(getValue(rightArray, j)) < 0) {
                 arr.set(k, leftArray.get(i));
                 i++;
             } else {
@@ -62,7 +62,7 @@ public class MergeSort<T extends Comparable<T>> {
     }
 
     public void merge(int left, int right, List<Pair<T, Integer>> arr) {
-        if (getNumberOfArray(arr, left) == getNumberOfArray(arr, right)) {
+        if (getNumberOfArray(arr, left).equals(getNumberOfArray(arr, right))) {
             for (int i = left; i < right; i++) {
                 arr.set(i, new Pair<>(getValue(arr, i), CHECK_ARRAY));
             }
@@ -71,7 +71,7 @@ public class MergeSort<T extends Comparable<T>> {
         if (left >= right) {
             return;
         }
-        int mid = left + (left + right) / 2;
+        int mid = left + (right - left) / 2;
         merge(left, mid, arr);
         merge(mid + 1, right, arr);
 
