@@ -16,10 +16,10 @@ public class Mode {
 
 
     public DataTypeSort getDataTypeSort(String key) {
-        return dataTypeSort.get(dataTypeSort.get(key));
+        return dataTypeSort.get(key);
     }
 
     public ModeSort getModeSort(String key) {
-        return modeSort.get(modeSort.get(key));
+        return modeSort.get(key);
     }
 }

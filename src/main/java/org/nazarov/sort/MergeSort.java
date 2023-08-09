@@ -3,6 +3,7 @@ package org.nazarov.sort;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.nazarov.models.sort.ModeSort;
 import org.nazarov.utils.Pair;
 
 import static java.lang.Integer.valueOf;
@@ -21,7 +22,7 @@ public class MergeSort<T extends Comparable<T>> {
         return arr.get(index).getSecond();
     }
 
-    private void mergeSort(int left, int mid, int right, List<Pair<T, Integer>> arr) {
+    private void mergeSort(int left, int mid, int right, List<Pair<T, Integer>> arr, ModeSort modeSort) {
         int n1 = mid - left + 1;
         int n2 = right - mid;
 
@@ -40,7 +41,15 @@ public class MergeSort<T extends Comparable<T>> {
         int j = 0;
         int k = left;
         while (i < n1 && j < n2) {
-            if (getValue(leftArray, i).compareTo(getValue(rightArray, j)) < 0) {
+            boolean conditionMet;
+
+            if (ModeSort.DESC == modeSort) {
+                conditionMet = getValue(leftArray, i).compareTo(getValue(rightArray, j)) >= 0;
+            } else {
+                conditionMet = getValue(leftArray, i).compareTo(getValue(rightArray, j)) < 0;
+            }
+
+            if (conditionMet) {
                 arr.set(k, leftArray.get(i));
                 i++;
             } else {
@@ -60,8 +69,9 @@ public class MergeSort<T extends Comparable<T>> {
             k++;
         }
     }
-
-    public void merge(int left, int right, List<Pair<T, Integer>> arr) {
+    public void merge(int left, int right, List<Pair<T, Integer>> arr, ModeSort modeSort) {
+        // I am not sure about condition of task. If we always have sorted input by ASC
+        // we need also write condition here modeSort == ModeSort.ASC
         if (getNumberOfArray(arr, left).equals(getNumberOfArray(arr, right))) {
             for (int i = left; i < right; i++) {
                 arr.set(i, new Pair<>(getValue(arr, i), CHECK_ARRAY));
@@ -72,9 +82,9 @@ public class MergeSort<T extends Comparable<T>> {
             return;
         }
         int mid = left + (right - left) / 2;
-        merge(left, mid, arr);
-        merge(mid + 1, right, arr);
+        merge(left, mid, arr, modeSort);
+        merge(mid + 1, right, arr, modeSort);
 
-        mergeSort(left, mid, right, arr);
+        mergeSort(left, mid, right, arr, modeSort);
     }
 }
