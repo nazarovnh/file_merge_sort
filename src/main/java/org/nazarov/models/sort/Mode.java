@@ -1,6 +1,9 @@
 package org.nazarov.models.sort;
 
+import org.nazarov.utils.Pair;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Mode {
@@ -22,4 +25,6 @@ public class Mode {
     public ModeSort getModeSort(String key) {
         return modeSort.get(key);
     }
+
+
 }

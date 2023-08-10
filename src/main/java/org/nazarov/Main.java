@@ -18,6 +18,31 @@ import java.util.List;
 import static org.nazarov.constants.Constants.*;
 
 public class Main {
+
+    public static void addValue(List<Pair<?, Integer>> array, String value, Integer numberArray, DataTypeSort dataTypeSort) {
+        if (dataTypeSort == DataTypeSort.INTEGER) {
+            array.add(new Pair<>(Integer.valueOf(value), numberArray));
+        } else {
+            array.add(new Pair<>(value, numberArray));
+        }
+    }
+
+    public static boolean comparePrevCurrentValue(String current, String prev, ModeSort modeSort, DataTypeSort dataTypeSort) {
+        if (dataTypeSort == DataTypeSort.INTEGER) {
+            int currentInt = Integer.parseInt(current);
+            int prevInt = Integer.parseInt(prev);
+            if (modeSort == ModeSort.ASC) {
+                return currentInt >= prevInt;
+            }
+            return currentInt <= prevInt;
+        }
+
+        if (modeSort == ModeSort.ASC) {
+            return current.compareTo(prev) >= 0;
+        }
+        return current.compareTo(prev) <= 0;
+    }
+
     public static void main(String[] args) {
 
 
@@ -45,26 +70,44 @@ public class Main {
         }
 
         List<Pair<?, Integer>> array = new ArrayList<>();
+        List<Pair<?, Integer>> outliers = new ArrayList<>();
 
+        boolean conditionSortOrder = true;
         for (int i = 0; i < namesInputFiles.size(); i++) {
+            String prevLine = null;
             String nameFile = namesInputFiles.get(i);
-            Path path = Paths.get("examples/" + nameFile);
+            Path path = Paths.get(INPUTS_FOLDER + nameFile);
+
             try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
                 String currentLine = null;
                 while ((currentLine = reader.readLine()) != null) {
+                    if (prevLine != null) {
+                        conditionSortOrder = comparePrevCurrentValue(currentLine, prevLine, modeSort, dataTypeSort);
+                    } else {
+                        conditionSortOrder = true;
+                    }
+
                     if (currentLine.contains(" ")) {
                         System.out.println("Warning: line has space. " + currentLine);
                         continue;
                     }
-                    if (dataTypeSort == DataTypeSort.INTEGER) {
-                        array.add(new Pair<>(Integer.valueOf(currentLine), i));
-                    } else {
-                        array.add(new Pair<>(currentLine, i));
+
+                    if (!conditionSortOrder) {
+                        System.out.println("Warning: sort of order was violated in file " + nameFile + ". With value " + currentLine);
+                        addValue(outliers, currentLine, null, dataTypeSort);
+                        continue;
                     }
+
+                    addValue(array, currentLine, i, dataTypeSort);
+                    prevLine = currentLine;
                 }
             } catch (IOException ex) {
                 System.out.println("Error: Can't read file " + nameFile);
             }
+        }
+
+        for (int i = 0; i < outliers.size(); i++) {
+            addValue(array, String.valueOf(outliers.get(i).getFirst()), null, dataTypeSort);
         }
 
         MergeSort mergeSort = new MergeSort();

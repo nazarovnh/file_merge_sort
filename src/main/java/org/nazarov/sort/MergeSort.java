@@ -72,15 +72,18 @@ public class MergeSort<T extends Comparable<T>> {
     public void merge(int left, int right, List<Pair<T, Integer>> arr, ModeSort modeSort) {
         // I am not sure about condition of task. If we always have sorted input by ASC
         // we need also write condition here modeSort == ModeSort.ASC
-        if (getNumberOfArray(arr, left).equals(getNumberOfArray(arr, right))) {
+        boolean outliersArray = getNumberOfArray(arr, left) != null && getNumberOfArray(arr, right) != null;
+        if (outliersArray && getNumberOfArray(arr, left).equals(getNumberOfArray(arr, right))) {
             for (int i = left; i < right; i++) {
                 arr.set(i, new Pair<>(getValue(arr, i), CHECK_ARRAY));
             }
             return;
         }
+
         if (left >= right) {
             return;
         }
+
         int mid = left + (right - left) / 2;
         merge(left, mid, arr, modeSort);
         merge(mid + 1, right, arr, modeSort);
