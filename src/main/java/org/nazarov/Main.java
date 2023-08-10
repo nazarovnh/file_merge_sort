@@ -106,6 +106,11 @@ public class Main {
             }
         }
 
+        if (array.size() == 0) {
+            System.out.println("Error: Can't read all files");
+            System.exit(0);
+        }
+
         for (int i = 0; i < outliers.size(); i++) {
             addValue(array, String.valueOf(outliers.get(i).getFirst()), null, dataTypeSort);
         }

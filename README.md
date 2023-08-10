@@ -18,5 +18,5 @@ mvn package
 ```
 2. Run project 
 ```shell
-java -jar target/file_merge_sort-1.0-SNAPSHOT.jar -s out.txt in1.txt in2.txt in3.txt
+java -jar target/file_merge_sort-1.0-SNAPSHOT.jar -a -s out.txt i1.txt i2.txt i3.txt
 ```
